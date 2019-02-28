@@ -1,3 +1,13 @@
+/*
+参考经验：https://zhuanlan.zhihu.com/p/30636063
+主要用到了两个模块：https 和 cheerio
+1. 用下载的网页初始化cheerio对象
+2. 解析
+3. agenda、Bull，设置好时间间隔，就可以自动爬取了. 
+4. 或者使用微信自带的定时器。https://developers.weixin.qq.com/miniprogram/dev/wxcloud/guide/functions/triggers.html
+
+*/
+
 const cheerio = require('cheerio')
 const fetch = require('node-fetch')
 const { omitBy, isNil } = require('lodash')
@@ -29,6 +39,12 @@ function removeDefaultAvatarSize(src) {
   return src.replace(/\?s=.*$/, '');
 }
 
+async function getCheerio() {
+  const html = await this.fetchPage();
+  const $ = await cheerio.load(html);
+  return $;
+}
+
 async function fetchAllLanguages() {
   const data = await fetch(`${GITHUB_URL}/trending/`);
   const $ = cheerio.load(await data.text());
@@ -56,6 +72,8 @@ async function fetchAllLanguages() {
     all: filterLanguages(allLanguages),
   };
 }
+
+
 
 async function fetchRepositories({
   language = '',

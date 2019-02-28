@@ -20,12 +20,12 @@ class Index extends Component {
     this.state = {
       current: 0,
       category: {
-        'name': 'Today',
-        'value': 'daily'
+        'name': 'Week',
+        'value': 'weekly'
       },
       language: {
-        'name': 'All',
-        'urlParam': ''
+        "urlParam": "python",
+        "name": "Python"
       },
       animation: null,
       scrollTop: null,
@@ -191,9 +191,9 @@ class Index extends Component {
 
   onShareAppMessage(obj) {
     return {
-      title: 'Github 今日热榜，随时随地发现您喜欢的开源项目',
+      title: 'Github trending',
       path: '/pages/index/index',
-      imageUrl: 'http://img.huangjianke.com/cover.png'
+      imageUrl: 'https://avatars1.githubusercontent.com/u/11958187?s=400&u=bd69714aea6dad5d20fd9abe85c2d1776c9fecf6&v=4'
     }
   }
 
@@ -206,6 +206,8 @@ class Index extends Component {
       categoryType = 2
     }
     const { developers, repos } = this.state
+    console.log(repos)
+    console.log(developers)
     return (
       <View className='content' id='list'>
         <View className='search_bg' onClick={this.onActionSearch.bind(this)}>

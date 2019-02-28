@@ -1,0 +1,10 @@
+{
+    "triggers": [
+      {
+        "name": "TrendSpider",
+        "type": "timer",
+        "_comments": "'触发器配置，在定时触发器下，config 格式为 cron 表达式，规则见下方说明'",
+        "config": "0 0 10,14,16 * * * *"
+      }
+    ]
+  }

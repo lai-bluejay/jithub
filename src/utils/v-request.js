@@ -100,27 +100,8 @@ wx.vrequest = function (options) {
     params.credentials = options.credentials
     params.cache = options.cache
     params.method = method
+    params.url = url
 
-    // 默认配置
-    const OPT = Object.assign({
-      method: 'GET',
-      // dataType: 'json',
-      responseType: 'text'
-    }, options);
-  
-    // 默认header
-    OPT['header'] = Object.assign({
-      'Content-Type': 'application/json',
-    }, options.header);
-  
-    // 发送的数据
-    // 如果data是string,对应request模块的body（buffer、string）
-    // 如果是object，则为json，对应request模块的json
-    let POST_DATA = {
-      body: options.data
-    };
-    if (typeof options.data === 'object') POST_DATA['body'] = JSON.stringify(POST_DATA['body']);
-    
     // 开始请求
     return new Promise((RES, REJ) => {
       wx.cloud.callFunction({
@@ -129,39 +110,14 @@ wx.vrequest = function (options) {
           options: params
         },
         success: res => {
-          const { result } = res;
-          // 如果datatype='json'，则解析后
-          let data = null;
-          if (options.dataType === 'json') {
-            try {
-              data = JSON.parse(result.body);
-            } catch (err) {
-              console.error('[!] v-request： 解析返回数据json失败', err);
-            }
-          }
-          if (options.responseType === 'arraybuffer') {
-            data = response.arrayBuffer()
-          }
-          if (options.responseType === 'text') {
-            data = response.text()
-          }
-          if (typeof options.dataType === 'undefined') {
-            data = response.json()
-          }
-          else {
-            // 否则为text数据
-            data = result.body;
-          }
-  
-          const RETURN_DATA = {
-            data,
-            errMsg: 'request:ok',
-            statusCode: result.statusCode,
-            header: result.headers
-          }
-  
-          options.success && options.success(RETURN_DATA);
-          RES(RETURN_DATA);
+            
+            const { result }  = res;
+            console.log((result))
+            // 如果datatype='json'，则解析后
+        
+    
+            options.success && options.success(result);
+            RES(result); 
         },
         fail: err => {
           // 错误回调

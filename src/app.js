@@ -1,3 +1,4 @@
+import './themes/custom-theme.scss'
 import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
@@ -64,10 +65,10 @@ class App extends Component {
         iconPath: './assets/images/tab_me.png',
         selectedIconPath: './assets/images/tab_me_s.png'
       }],
-      color: '#8a8a8a',
-      selectedColor: '#2d8cf0',
-      backgroundColor: '#ffffff',
-      borderStyle: 'white'
+      // color: '#8a8a8a',
+      // selectedColor: '#2d8cf0',
+      // backgroundColor: '#ffffff',
+      // borderStyle: 'white'
     }
   }
 

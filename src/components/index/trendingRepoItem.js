@@ -1,10 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import PropTypes from 'prop-types';
-import { View } from '@tarojs/components'
-import { AtIcon } from 'taro-ui'
+import { View, Text } from '@tarojs/components'
+import { AtIcon, AtCard } from 'taro-ui'
 
 
 import './trendingRepoItem.less'
+import ItemList from './itemList';
 
 export default class TrendingRepoItem extends Component {
   static propTypes = {
@@ -29,36 +30,43 @@ export default class TrendingRepoItem extends Component {
     }else if (categoryType === 2) {
       currentPeriod = item.currentPeriodStars + ' stars this month'
     }
+    let currentTitle = null
+    currentTitle = item.author + item.name
 
     return (
-     <View className='content'>
-       <View className='title_view'>
-         <AtIcon prefixClass='ion' value='md-bookmarks' size='25' color='#333' />
-         <View className='repo_title'>{item.author}/{item.name}</View>
-       </View>
-       <View className='repo_desc'>{item.description}</View>
-       <View className='number_info'>
-         {
-           item.language.length > 0 &&
-           <View className='number_item'>
-             <AtIcon prefixClass='ion' value='ios-radio-button-on' size='15' color={item.languageColor} />
-             <View className='number_title'>{item.language}</View>
-           </View>
-         }
-         <View className='number_item'>
-           <AtIcon prefixClass='ion' value='ios-star' size='15' color='#7f7f7f' />
-           <View className='number_title'>{item.stars}</View>
-         </View>
-         <View className='number_item'>
-           <AtIcon prefixClass='ion' value='ios-git-network' size='15' color='#7f7f7f' />
-           <View className='number_title'>{item.forks}</View>
-         </View>
-       </View>
-       <View className='today_view'>
-         <AtIcon prefixClass='ion' value='ios-star' size='17' color='#ff4949' />
-         <View className='today_title'>{currentPeriod}</View>
-       </View>
-     </View>
+      <AtCard
+      extra={item.author}
+      title={item.name}>
+        <View className='at-row'>
+          <View className='at-col at-col-1 at-col--auto'>
+          <div className='content'>
+            {item.description}
+            </div>
+          </View>
+        </View>
+          <View className='number_info'>
+            {
+              item.language.length > 0 &&
+              <View className='number_item'>
+                <AtIcon prefixClass='ion' value='ios-radio-button-on' size='15' color={item.languageColor} />
+                <View className='number_title'>{item.language}</View>
+              </View>
+            }
+            <View className='number_item'>
+              <AtIcon prefixClass='ion' value='ios-star' size='15' color='#7f7f7f' />
+              <View className='number_title'>{item.stars}</View>
+            </View>
+            <View className='number_item'>
+              <AtIcon prefixClass='ion' value='ios-git-network' size='15' color='#7f7f7f' />
+              <View className='number_title'>{item.forks}</View>
+            </View>
+          </View>
+          <View className='today_view'>
+            <AtIcon prefixClass='ion' value='ios-star' size='17' color='#ff4949' />
+            <View className='today_title'>{currentPeriod}</View>
+          </View>
+        {/* {item.description} */}
+     </AtCard>
     )
   }
 

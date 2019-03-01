@@ -19,23 +19,23 @@ export default class TrendingDeveloperItem extends Component {
     const { item } = this.props
     if (!item) return <View />
     return (
-      
-      <View className='content'>
-        <AtAvatar circle size='large' image={item.avatar} />
+      // <View className='content'>
+        
         <AtCard
         title={item.username}
         extra={item.name}
+        thumb={item.avatar}
         >
-        <View className='user_info'>
+        {/* <View className='user_info'> */}
           {/* <View className='user_name'>{item.username}</View> */}
           <View className='repo'>
             <AtIcon prefixClass='ion' value='md-bookmarks' size='18' color='#333' />
             <View className='repo_title'>{item.repo.name}</View>
           </View>
-          <View className='repo_desc'>{item.repo.description}</View>
-        </View>
+        {/* </View> */}
+        <Text className='repo_desc'>{item.repo.description}</Text>
         </AtCard>
-      </View>
+      //  </View>
     )
   }
 

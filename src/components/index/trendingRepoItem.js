@@ -37,13 +37,10 @@ export default class TrendingRepoItem extends Component {
       <AtCard
       extra={item.author}
       title={item.name}>
-        <View className='at-row'>
-          <View className='at-col at-col-1 at-col--auto'>
-          <div className='content'>
+      
+          <Text className='repo_desc'>
             {item.description}
-            </div>
-          </View>
-        </View>
+            </Text>
           <View className='number_info'>
             {
               item.language.length > 0 &&

@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Navigator, Ad } from '@tarojs/components'
 import { GLOBAL_CONFIG } from '../../constants/globalConfig'
-import { AtIcon } from 'taro-ui'
+import { AtIcon, AtGrid } from 'taro-ui'
 import { base64_decode } from '../../utils/base64'
 import { hasLogin } from '../../utils/common'
 import { HTTP_STATUS } from '../../constants/status'
@@ -120,6 +120,21 @@ class Repo extends Component {
         that.parseReadme()
       })
     })
+  }
+
+  handleOpenReadme() {
+
+      const { repo } = this.state
+      let url = '/repos/' + repo.full_name + '/readme'
+      let that = this
+      api.get(url).then((res)=>{
+        that.setState({
+          readme: res.data
+        }, ()=>{
+          that.parseReadme()
+        })
+      })
+
   }
 
   parseReadme() {
@@ -252,7 +267,7 @@ class Repo extends Component {
     })
     console.log(event.detail)
   }
-
+  
   render () {
     const { repo, hasStar, isShare, md, baseUrl, loadAd } = this.state
     if (!repo) return <View />
@@ -274,54 +289,45 @@ class Repo extends Component {
           <Text className='repo_info_desc'>{repo.description || 'no description'}</Text>
         </View>
         <View className='repo_number_view'>
-          <View className='repo_number_item_view'>
-            <View className='repo_number_item'>
-              <AtIcon prefixClass='ion' value='ios-eye' size='25' color='#333' />
-              <Text className='repo_number_title'>{repo.subscribers_count}</Text>
-            </View>
-            <View className='repo_number_item' onClick={this.handleStar.bind(this)}>
-              <AtIcon prefixClass='ion'
-                      value={hasStar ? 'ios-star' : 'ios-star-outline'}
-                      size='25'
-                      color={hasStar ? '#333' : '#333'} />
-              <Text className='repo_number_title'>{repo.stargazers_count}</Text>
-            </View>
-            <View className='repo_number_item' onClick={this.handleFork.bind(this)}>
-              <AtIcon prefixClass='ion' value='ios-git-network' size='25' color='#333' />
-              <Text className='repo_number_title'>{repo.forks_count}</Text>
-            </View>
-          </View>
+          <AtGrid mode='rect' data={
+            [
+              {iconInfo: {prefixClass:'ion', value:'ios-eye', size:25, color:'#333' },
+                value: repo.subscribers_count+""
+            },
+              {
+                iconInfo: {prefixClass:'ion', value:hasStar ? 'ios-star' : 'ios-star-outline', size:25, color:'#333' },
+                value: repo.stargazers_count+"",
+                onClick: this.handleStar.bind(this),
+              },
+              {
+                iconInfo: {prefixClass:'ion', value:'ios-git-network', size:25, color:'#333' },
+                value: repo.stargazers_count+"",
+                onClick: this.handleFork.bind(this),
+              },
+            ]
+            }/>
           <Button className='share_button' openType='share'>Share</Button>
         </View>
         <View className='repo_info_list_view'>
-          <View className='repo_info_list' onClick={this.handleNavigate.bind(this, NAVIGATE_TYPE.USER)}>
-            <View className='list_title'>Author</View>
-            <View className='list_content'>
-              <Text className='list_content_title'>{repo.owner.login}</Text>
-              <AtIcon prefixClass='ion' value='ios-arrow-forward' size='18' color='#7f7f7f' />
-            </View>
-          </View>
-          <View className='repo_info_list' onClick={this.handleNavigate.bind(this, NAVIGATE_TYPE.REPO_CONTENT_LIST)}>
-            <View className='list_title'>View Code</View>
-            <AtIcon prefixClass='ion' value='ios-arrow-forward' size='18' color='#7f7f7f' />
-          </View>
-          <View className='repo_info_list'>
-            <View className='list_title'>Branch</View>
-            <View className='list_content'>
-              <Text className='list_content_title'>{repo.default_branch}</Text>
-              {/*<AtIcon prefixClass='ion' value='ios-arrow-forward' size='18' color='#7f7f7f' />*/}
-            </View>
-          </View>
-          <View className='repo_info_list'>
-            <View className='list_title'>License</View>
-            <View className='list_content'>
-              <Text className='list_content_title'>{repo.license.spdx_id || '--'}</Text>
-              {/*<AtIcon prefixClass='ion' value='ios-arrow-forward' size='18' color='#7f7f7f' />*/}
-            </View>
-          </View>
-        </View>
-        <View className='repo_info_list_view'>
-          <View className='repo_info_list' onClick={this.handleNavigate.bind(this, NAVIGATE_TYPE.ISSUES)}>
+          <AtGrid className='repo_info_list' columnNum={2} mode='rect' data={
+            [
+              {iconInfo: {prefixClass:'ion', value:'ios-arrow-forward', size:18, color:'#333' },
+                value: 'Author: '+repo.owner.login,
+                onClick: this.handleNavigate.bind(this, NAVIGATE_TYPE.USER)
+            },
+            {
+              iconInfo: {prefixClass:'ion', value:'ios-arrow-forward', size:18, color:'#333' },
+              value: 'View Code',
+              onClick: this.handleNavigate.bind(this, NAVIGATE_TYPE.REPO_CONTENT_LIST),
+            },
+              {
+                iconInfo: {prefixClass:'ion', value:'ios-arrow-forward', size:18, color:'#333' },
+                value: 'Branch: '+repo.default_branch,
+                onClick: this.handleNavigate.bind(this, NAVIGATE_TYPE.REPO_CONTENT_LIST),
+              }
+            ]
+            }/>
+            <View className='repo_info_list' onClick={this.handleNavigate.bind(this, NAVIGATE_TYPE.ISSUES)}>
             <View className='list_title'>Issues</View>
             <View className='list_content'>
               {
@@ -336,6 +342,7 @@ class Repo extends Component {
             <AtIcon prefixClass='ion' value='ios-arrow-forward' size='18' color='#7f7f7f' />
           </View>
         </View>
+  
         {
           md &&
           <View className='markdown'>

@@ -59,6 +59,7 @@ class ContentList extends Component {
     if (path) {
       url = url + '/' + path
     }
+    console.log(url)
     Taro.showLoading({title: GLOBAL_CONFIG.LOADING_TEXT})
     api.get(url).then((res)=>{
       that.setState({

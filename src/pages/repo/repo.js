@@ -201,6 +201,7 @@ class Repo extends Component {
   }
 
   handleFork() {
+    console.log('fork')
     Taro.showLoading({title: GLOBAL_CONFIG.LOADING_TEXT})
     const { repo } = this.state
     let url = '/repos/' + repo.full_name + '/forks'
@@ -222,6 +223,7 @@ class Repo extends Component {
 
   handleNavigate(type) {
     const { repo } = this.state
+    console.log(type)
     switch (type) {
       case NAVIGATE_TYPE.USER: {
         Taro.navigateTo({
@@ -268,6 +270,20 @@ class Repo extends Component {
     console.log(event.detail)
   }
   
+  handleGridClick = (data) => {
+    let id = data.id
+    switch(id) {
+      case id==='eye':{
+
+      }
+      case id ==='star':{
+        this.handleStar.bind(this)
+      }
+      case id ==='fork':{
+        this.handleFork.bind(this)
+      }
+    }
+  }
   render () {
     const { repo, hasStar, isShare, md, baseUrl, loadAd } = this.state
     if (!repo) return <View />
@@ -289,26 +305,29 @@ class Repo extends Component {
           <Text className='repo_info_desc'>{repo.description || 'no description'}</Text>
         </View>
         <View className='repo_number_view'>
-          <AtGrid mode='rect' data={
+          <AtGrid mode='rect' onClick={this.handleGridClick} data={
             [
               {iconInfo: {prefixClass:'ion', value:'ios-eye', size:25, color:'#333' },
-                value: repo.subscribers_count+""
+                value: repo.subscribers_count+"",
+                id: 'eye'
             },
               {
                 iconInfo: {prefixClass:'ion', value:hasStar ? 'ios-star' : 'ios-star-outline', size:25, color:'#333' },
                 value: repo.stargazers_count+"",
                 onClick: this.handleStar.bind(this),
+                id: 'star'
               },
               {
                 iconInfo: {prefixClass:'ion', value:'ios-git-network', size:25, color:'#333' },
-                value: repo.stargazers_count+"",
+                value: repo.forks_count+"",
                 onClick: this.handleFork.bind(this),
+                id: 'fork'
               },
             ]
             }/>
           <Button className='share_button' openType='share'>Share</Button>
         </View>
-        <View className='repo_info_list_view'>
+        <View className='repo_sub_info_view'>
           <AtGrid className='repo_info_list' columnNum={2} mode='rect' data={
             [
               {iconInfo: {prefixClass:'ion', value:'ios-arrow-forward', size:18, color:'#333' },
@@ -324,6 +343,11 @@ class Repo extends Component {
                 iconInfo: {prefixClass:'ion', value:'ios-arrow-forward', size:18, color:'#333' },
                 value: 'Branch: '+repo.default_branch,
                 onClick: this.handleNavigate.bind(this, NAVIGATE_TYPE.REPO_CONTENT_LIST),
+              },
+              {
+                iconInfo: {prefixClass:'ion', value:'ios-arrow-forward', size:18, color:'#333' },
+                value: 'Issues: '+repo.open_issues_count,
+                onClick: this.handleNavigate.bind(this, NAVIGATE_TYPE.ISSUES),
               }
             ]
             }/>
